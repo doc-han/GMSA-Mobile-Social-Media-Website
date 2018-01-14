@@ -112,8 +112,8 @@ function imageselected(){
 				$tag2 = '</option>';
 				$b = 2008;
 				$currentyear = date('Y');
-				$interval = $currentyear - $c;
-				for($i=$b;$i<=$currentyear;$i++){
+				$interval = $currentyear - $b;
+				for($i=$currentyear;$i>=$b;$i--){
 				  if($i == $year){
 				    echo "$stag $i $tag2";
 				  }else{

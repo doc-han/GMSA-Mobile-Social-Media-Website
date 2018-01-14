@@ -207,7 +207,6 @@ if(!isset($_SESSION['userId']))
 				$postTxt = nl2br(htmlspecialchars(stripcslashes(htmlentities($_POST['postTxt'])), ENT_QUOTES));
 				$userId = $_SESSION['userId'];
 				$school = $_SESSION['school'];
-				$username = $_SESSION['fullname'];
 				$rand = rand(100,100000000000000);
 				$rand1 = rand(100,100000000000000);
 				$postId = "a".$rand."".$rand1;
@@ -237,7 +236,7 @@ if(!isset($_SESSION['userId']))
 
 
 				// inserting data into database
-				$query = "INSERT INTO posts (id,userId,username,postId,likes,comments,postTxt,postImg,activity,school)VALUES(null,'$userId','$username','$postId','0','0','$postTxt','$postImg','added a new post','$school')";
+				$query = "INSERT INTO posts (id,userId,postId,likes,comments,postTxt,postImg,activity,school)VALUES(null,'$userId','$postId','0','0','$postTxt','$postImg','added a new post','$school')";
 				$query1 = "CREATE TABLE `".$postId."` (
 							`id` int(11) NOT NULL AUTO_INCREMENT ,
 							`userId` varchar(255) NOT NULL,
@@ -281,7 +280,6 @@ if(!isset($_SESSION['userId']))
 				while($get = $get1->fetch_assoc())
 				{
 					$PuserId = $get['userId'];
-					$Pusername = $get['username'];
 					$PpostId = $get['postId'];
 					$Plikes = $get['likes'];
 					$Pcomments = $get['comments'];
@@ -291,9 +289,10 @@ if(!isset($_SESSION['userId']))
 					$Pschool = $get['school'];
 
 					//getting post user profile pic
-					$getpic = $connect->query("SELECT profilepic FROM users WHERE userId='$PuserId'");
+					$getpic = $connect->query("SELECT profilepic,fullname FROM users WHERE userId='$PuserId'");
 					while($picfetch = $getpic->fetch_assoc()){
 						$Puserpic = $picfetch['profilepic'];
+						$Pusername = $picfetch['fullname'];
 					}
 					if($PpostImg != '0'){
 						$img = '<img src="uploads/images/posts/'.$PpostId.'.'.$PpostImg.'" >';
@@ -349,6 +348,7 @@ if(!isset($_SESSION['userId']))
 		</form>
 		</div>
 
+<?php include 'footer.php';?>
 	</body>
 
 </html>

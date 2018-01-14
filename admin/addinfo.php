@@ -19,17 +19,7 @@ if(!isset($_SESSION['adminId']))
 
 <script src="../extra/js/jquery-3.2.1.js"></script>
 <script type="text/javascript">
-$(document).ready(function(){
-  $("input[name='position']").hide();
-  $("#exe").click(function(){
-    $("input[name='position']").show();
-    $("input[name='position']").attr("value","");
-  });
-  $("#mem").click(function(){
-    $("input[name='position']").hide();
-    $("input[name='position']").attr("value","none");
-  });
-});
+
 </script>
 		<title>
 			Admin Login
@@ -56,21 +46,30 @@ $(document).ready(function(){
   <BR />
   <?php
 include "../dbgmsa.php";
+include 'positionslist.php';
 if(isset($_POST['go'])){
-  $type = htmlentities($_POST['usertype']);
   $fullname = htmlentities($_POST['fullname']);
   $class = htmlentities($_POST['class']);
   $year = htmlentities($_POST['year']);
-  $position = htmlentities($_POST['position']);
+  $id = htmlentities($_POST['position']);
+	$position = getpos($id);
 
-  $query = "INSERT INTO students (id,fullname,class,year,position,type,image)VALUES(null,'$fullname','$class','$year','$position','$type',0)";
-  $insert = $connect->query($query);
-  if($insert === TRUE){
-    echo "<div class='alert alert-success'>Info of <b>".$fullname."</b> has been added!</div>";
-  }else{
-    echo "<div class='alert alert-danger'>Unable to add info of <b>".$fullname."</b>. Try Again!</div>";
-  }
-}
+	$check = $connect->query("SELECT id FROM executives WHERE id='$id' AND year='$year'");
+	if(mysqli_num_rows($check)>0){
+		echo "<div class='alert alert-danger'>This position is already <b>occupied!</b></div>";
+	}else{
+		$query = "INSERT INTO executives (num,id,fullname,class,year,position,image)VALUES(null,'$id','$fullname','$class','$year','$position',0)";
+	  $insert = $connect->query($query);
+		echo $connect->error;
+	  if($insert){
+	    echo "<div class='alert alert-success'>Info of <b>".$fullname."</b> has been added!</div>";
+	  }else{
+	    echo "<div class='alert alert-danger'>Unable to add info of <b>".$fullname."</b>. Try Again!</div>";
+	  }
+	}
+	}
+
+
   ?>
   <form method="POST" action="addinfo.php">
   <center>
@@ -85,25 +84,22 @@ if(isset($_POST['go'])){
     <br />
     <br />
 
-<div class="btn-group" data-toggle="buttons">
-  <label class="btn btn-danger">
-    <input type="radio" id="exe" name="usertype" value="Executive" autocomplete="off"> Executive
-  </label>
-  <label class="btn btn-primary">
-    <input type="radio" id="mem" name="usertype" value="Member" autocomplete="off" checked> Member
-  </label>
-</div>
+
+  <span type="button" class="label label-danger">Exucutive</span>
+
 </center><br>
 <div class="container">
 <input type="text" class="form-control" style="margin-top:5px" placeholder="Full name" name="fullname">
 <select class="form-control" style="margin-top:5px" name="class" value="<?php echo $year; ?>" type="year" >
-	<option>Class</option><option>Science One [ S1 ]</option><option>Science Two [ S2 ]</option><option>Science Three [ S3 ]</option><option>Science Four [ S4 ]</option><option>Science Five [ S5 ]</option><option>Science Six [ S6 ]</option><option>Science Seven [ S7 ]</option><option>General Arts One [ A1 ]</option><option>General Arts Two [ A2 ]</option><option>General Arts Three [ A3 ]</option><option>General Arts Four [ A4 ]</option><option>General Arts Five [ A5 ]</option><option>General Arts Six [ A6 ]</option><option>Visual Arts One [ V1 ]</option><option>Visual Arts Two [ V2 ]</option><option>Business One [ B1 ]</option><option>Business Two [ B2 ]</option>
+	<option value="0" >Class</option><option>Science One [ S1 ]</option><option>Science Two [ S2 ]</option><option>Science Three [ S3 ]</option><option>Science Four [ S4 ]</option><option>Science Five [ S5 ]</option><option>Science Six [ S6 ]</option><option>Science Seven [ S7 ]</option><option>General Arts One [ A1 ]</option><option>General Arts Two [ A2 ]</option><option>General Arts Three [ A3 ]</option><option>General Arts Four [ A4 ]</option><option>General Arts Five [ A5 ]</option><option>General Arts Six [ A6 ]</option><option>Visual Arts One [ V1 ]</option><option>Visual Arts Two [ V2 ]</option><option>Business One [ B1 ]</option><option>Business Two [ B2 ]</option>
 </select>
 <select class="form-control" style="margin-top:5px" name="year" value="<?php echo $year; ?>" type="year" >
-	<option>Year of starting school</option><option>2008</option><option>2009</option><option>2010</option><option>2011</option><option>2012</option><option>2013</option><option>2014</option><option>2015</option><option>2016</option><option>2017</option>
+	<option value="0" >Year of service</option><option>2008</option><option>2009</option><option>2010</option><option>2011</option><option>2012</option><option>2013</option><option>2014</option><option>2015</option><option>2016</option><option>2017</option>
 </select>
 <select class="form-control" style="margin-top:5px" name="position">
-	<option>Position</option><option>President [ P ]</option><option>Vice President [ VP ]</option><option>General Secetary [ GS ]</option><option>Imam [ I ]</option><option>Public Relation Officer [ PRO ]</option><option>Womens Commissioner [ WOCOM ]</option>
+	<option value="0" >Position</option><option value="1" >President [ P ]</option><option value="2" >Vice President [ VP ]</option><option value="3" >General Secetary [ GS ]</option><option value="4" >Imam [ I ]</option><option value="5" >Public Relation Officer [ PRO ]</option>
+	<option value="6" >Womens Commissioner [ WOCOM ]</option><option value="7" >Deputy Imam [ DI ]</option><option value="8" >Financial Secetary [ FS ]</option><option value="9" >Male Organiser [ MO ]</option><option value="10" >Female Organiser [ FO ]</option><option value="11" >Male Advisor [ MA ]</option>
+	<option value="12" >Female Advisor [ FA ]</option><option value="13" >Asst Male Organiser [ AMO ]</option><option value="14" >Treasure [ T ]</option><option value="15" >Deputy Womens Commissioner [ DWC ]</option>
 </select>
 <br>
 <button type="submit" name="go" class="form-control btn btn-success" name="button">Add User</button><br>

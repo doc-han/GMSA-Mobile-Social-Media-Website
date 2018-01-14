@@ -172,7 +172,7 @@ if(isset($_POST['edit'])){
 </div>
 
 
-
+<?php include 'footer.php';?>
 
 	</body>
 

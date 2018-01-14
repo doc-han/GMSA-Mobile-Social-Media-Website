@@ -1,4 +1,9 @@
-
+<?php
+//check whether device is a mobile;
+if(!stristr($_SERVER['HTTP_USER_AGENT'],'Mobile')){
+	//header('location: desktop.php');
+}
+?>
 <nav class="navbar navbar-inverse" id="header" style="margin-bottom: 0px">
   <div class="container-fluid">
     <div class="navbar-header">
