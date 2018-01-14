@@ -1,0 +1,9 @@
+* UPVOTE.PHP
+
+In the database it has a column named type
+If type==1
+	Then the type is a like
+If type==2
+	Then the type is a comment
+If type==3
+	Then the type is both a like and a comment
