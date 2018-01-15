@@ -9,12 +9,13 @@ if(!isset($_SESSION['userId']))
 		$_SESSION['chat-other'] = $oid;
 		include 'dbgmsa.php';
 		// Fetching users fullname and images
-		$query = "SELECT fullname FROM users WHERE userId='$oid' ";
+		$query = "SELECT fullname,profilepic FROM users WHERE userId='$oid' ";
 		$get = $connect->query($query);
 		$row = mysqli_num_rows($get);
 		if($row == 1){
 			while($fetch = $get->fetch_assoc()){
 				$fullname = $fetch['fullname'];
+				$ppic = $fetch['profilepic'];
 			}
 		}else{
 			//no user with such ID
@@ -51,7 +52,7 @@ if(!isset($_SESSION['userId']))
 		<?php include 'sheader.php';?>
 		<div class="ud">
 			<div class="img">
-					<img src="extra/img/pic.jpg" alt="">
+					<img src="uploads/images/profiles/<?php echo $ppic;?>" alt="">
 			</div>
 			<div class="mid">
 					<h3><?php echo $fullname; ?></h3>

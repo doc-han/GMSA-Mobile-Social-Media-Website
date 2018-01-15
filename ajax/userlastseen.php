@@ -24,7 +24,7 @@
       echo "online";
     }else{
       echo "Last seen ";
-      echo solvedate($lastseen);
+      echo solveDate($lastseen);
     }
   }
 ?>

@@ -14,6 +14,19 @@ if(!isset($_SESSION['fullname']))
   $year = $_SESSION['year'];
   $gender = $_SESSION['gender'];
 	$profilepic = $_SESSION['profilepic'];
+
+	$activeUser = trim($_SESSION['userId']);
+	// h=hours i=minutes d=day m=month Y=year
+	$s = date("s");
+	$i = date("i");
+	$h = date("h");
+	$d = date("d");
+	$y = date("Y");
+	$m = date("m");
+	if(date("a") == "pm"){
+		$h = $h + 12;
+	}
+	$nottime = $y.$m.$d.$h.$i.$s;
 }
 
 
@@ -94,6 +107,15 @@ if(isset($_POST['edit'])){
 	$eschool = $_POST['school'];
 
 	//changing users profile pic
+	// 1 deleting the provious profile pic
+	$defaults = ["default_profile1.png","default_profile2.png","default_profile3.png","default_profile4.png","default_profile5.png","default_profile6.png","default_profile7.png","default_profile8.png","default_profile9.png","default_profile10.png"];
+	if(file_exists("uploads/images/profiles/$profilepic")){
+		if(!in_array($profilepic, $defaults)){
+			unlink("uploads/images/profiles/$profilepic");
+		}
+
+	}
+	// 2 adding the new profile pic
 	$location = 'uploads/images/profiles/';
 	$target_file = $location . basename($_FILES["file"]["name"]);
 	$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
@@ -102,17 +124,20 @@ if(isset($_POST['edit'])){
 	$tmp_name = $_FILES["file"]["tmp_name"];
 	$error = $_FILES["file"]["error"];
 
-	if(!empty($name)) {
-
+	if(!empty($_FILES["file"]["name"])) {
+		//message for notification to show that profilepic has been updated
+		$message = "Changed his/her Profile Pic and some info";
 		if(move_uploaded_file($tmp_name, $location.$name)){
 			//inserting prototype into the database
 			$imagename = $name;
 			echo "<div class='alert alert-success'>Profile Pic changed</div>";
 		}else {
-			// I've got nothing to do here!
 			$imagename = $profilepic;
 			echo "<div class='alert alert-warning'>Profile Pic Unchanged</div>";
 		}
+	}else{
+		$message = "Updated his/her Account Info";
+		$imagename = $profilepic;
 	}
 
 	//updating users info
@@ -120,6 +145,16 @@ if(isset($_POST['edit'])){
 	$update = $connect->query($query);
 	if($update){
 		echo "<div class='alert alert-success'>Details Updated. <a href='account.php'>Click Here</a> to see change.</div>";
+		//code for notification to followers
+		// 1 getting Followers
+		$getf = $followconnect->query("SELECT userId FROM `$activeUser` WHERE follow=1");
+		while($fetchf = $getf->fetch_assoc()){
+			$followersId = $fetchf['userId'];
+
+			//notifing the follower
+			$notify = $Notconnect->query("INSERT INTO `$followersId` (id,sname,senderId,message,type,link,lc,nottime)VALUES(null, '$fullname', '$activeUser', '$message', '1', 'profile.php?ref=$activeUser','1','$nottime') ");
+		}
+
 		//updating session after changing users details
 		$_SESSION['profilepic'] = $imagename;
 		$_SESSION['firstname'] = $efirstname;
@@ -138,15 +173,15 @@ if(isset($_POST['edit'])){
   <tbody>
     <tr>
       <td><b>followers</b></td>
-      <td><?php echo $followers;?></td>
+      <td><?php echo $followers;?><a class="pull-right" href="view.php?cat=followers&ref=<?php echo $activeUser;?>">show all</a></td>
     </tr>
     <tr>
       <td><b>following</b></td>
-      <td><?php echo $following;?></td>
+      <td><?php echo $following;?><a class="pull-right" href="view.php?cat=following&ref=<?php echo $activeUser;?>">show all</a></td>
     </tr>
     <tr>
       <td><b>posts</b></td>
-      <td><?php echo $posts; ?></td>
+      <td><?php echo $posts; ?><a class="pull-right" href="view.php?cat=posts&ref=<?php echo $activeUser;?>">show all</a></td>
     </tr>
     <tr>
       <td><b>Email/Phone</b></td>

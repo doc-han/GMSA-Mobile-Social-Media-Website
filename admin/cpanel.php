@@ -28,32 +28,32 @@ if(!isset($_SESSION['adminId']))
 	<div class="list-group">
 		<?php
 		include '../dbgmsa.php';
-
+		$yearfilter = $_SESSION['adminyear'];
 		//getting total number of users
-		$getTotal = $connect->query("SELECT id FROM users");
+		$getTotal = $connect->query("SELECT id FROM users WHERE year='$yearfilter'");
 		$total = mysqli_num_rows($getTotal);
 		//getting total number of males
-		$getMales = $connect->query("SELECT id FROM users WHERE gender='male'");
+		$getMales = $connect->query("SELECT id FROM users WHERE gender='male' AND year='$yearfilter'");
 		$males = mysqli_num_rows($getMales);
 		//getting total number of females
-		$getFemales = $connect->query("SELECT id FROM users WHERE gender='female'");
+		$getFemales = $connect->query("SELECT id FROM users WHERE gender='female' AND year='$yearfilter'");
 		$females = mysqli_num_rows($getFemales);
 
 		?>
 		<a href="#" class="list-group-item active">Total number of users <span class="badge"><?php echo $total; ?></span></a>
 		<a href="#" class="list-group-item ">Total number of males <span class="badge"><?php echo $males; ?></span></a>
 		<a href="#" class="list-group-item active">Total number of females <span class="badge"><?php echo $females; ?></span></a>
-		<a href="#" class="list-group-item a">Reports <span class="badge">5</span></a>
+		<!--<a href="#" class="list-group-item a">Reports <span class="badge">5</span></a>-->
 	</div>
 
 	<div class="container" style="width: 100%">
 		<a href="addinfo.php"><button type="button" style="width: 49%" class="btn btn-warning" name="button">Add info</button></a>
-		<a href="findinfo.php"><button type="button" style="width: 49%" class="btn btn-danger" name="button">Remove/change info</button></a>
-		<a href="finduser.php"><button type="button" style="width: 49%;margin-top:5px" class="btn btn-dark" name="button">Find User</button></a>
+		<button type="button" style="width: 49%" class="btn btn-danger disabled" name="button">Edit info</button>
+		<!--<a href="finduser.php"><button type="button" style="width: 49%;margin-top:5px" class="btn btn-dark" name="button">Find User</button></a>-->
 	</div>
 	<br>
 	<div class="container">
-	<button type="button" class=" form-control btn btn-success" name="button">View Reports</button>
+	<a href="logout.php"><button type="button" class=" form-control btn btn-success" name="button">Logout</button></a>
 </div>
 
 

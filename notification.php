@@ -38,9 +38,9 @@ $(document).ready(function() {
 	<div class="list-group">
 		<?php
 include 'dbgmsa.php';
-
+include 'solvedate.php';
 	$userId = $_SESSION['userId'];
-	$query = "SELECT * FROM `$userId` ORDER BY id DESC LIMIT 0,20";
+	$query = "SELECT * FROM `$userId` ORDER BY id DESC LIMIT 0,30";
 	$get = $Notconnect->query($query);
 	while($get1 = $get->fetch_assoc()){
 		$sname = $get1['sname'];
@@ -48,11 +48,13 @@ include 'dbgmsa.php';
 		$message = $get1['message'];
 		$link = $get1['link'];
 		$lc = $get1['lc'];
+		$time = $get1['nottime'];
+		$time = solveDate($time);
 
 		if($lc == 1){
-			echo '<a href="'.$link.'" class="list-group-item list-group-item-action flex-column align-items-start"><div class="d-flex w-100 justify-content-between"><small class="text-muted">3 days ago</small></div><p class="mb-1"><b style="color:#337ab7">'.$sname.' '.$message.'</b></p></a>';
+			echo '<a href="'.$link.'" class="list-group-item list-group-item-action flex-column align-items-start"><div class="d-flex w-100 justify-content-between"><small class="text-muted">'.$time.'</small></div><p class="mb-1"><b style="color:#337ab7">'.$sname.' '.$message.'</b></p></a>';
 		}else{
-			echo '<a href="'.$link.'" class="list-group-item list-group-item-action flex-column align-items-start"><div class="d-flex w-100 justify-content-between"><small class="text-muted">3 days ago</small></div><p class="mb-1">'.$sname.' '.$message.'</p></a>';
+			echo '<a href="'.$link.'" class="list-group-item list-group-item-action flex-column align-items-start"><div class="d-flex w-100 justify-content-between"><small class="text-muted">'.$time.'</small></div><p class="mb-1">'.$sname.' '.$message.'</p></a>';
 		}
 
 

@@ -53,21 +53,30 @@ html {
 	width: 80%;
 	margin: 10%;
 }
+@keyframes enterleft {
+	from {right: 1000px;}
+	to {right: 0px;}
+}
+
 .sections {
+	animation-name: enterleft;
+	animation-duration: 1s;
 	float: left;
 	width: 40%;
 	margin-left: 10%;
 	margin-top: 10%;
 	height: 100px;
+	position: relative;
 	text-align: center;
 	line-height: 100px;
 	box-shadow: 0 8px 16px 0 rgba(0,0,0,0.4);
-    transition: 0.3s;
+  transition: 0.3s;
 	color: #000;
 	font-weight: bolder;
-    border-radius: 5px;
+  border-radius: 5px;
 	background-color: rgba(255, 248, 220, 0.82);
 }
+
 .sections:hover {
 	box-shadow: 0 2px 4px 0 rgba(0,0,0,0.4);
 }

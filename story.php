@@ -22,7 +22,7 @@ if(isset($_GET['postId'])){
 	<!--linking the javascript files-->
 	<script src="extra/js/jquery-3.2.1.js"></script>
 	<script src="extra/js/lastActivity.js"></script>
-	
+
 	<script>
 	$(document).ready(function(){
 		$(".comment_modal").hide();
@@ -170,7 +170,6 @@ if(isset($_GET['postId'])){
 				while($get = $get1->fetch_assoc())
 				{
 					$PuserId = $get['userId'];
-					$Pusername = $get['username'];
 					$PpostId = $get['postId'];
 					$Plikes = $get['likes'];
 					$Pcomments = $get['comments'];
@@ -178,6 +177,13 @@ if(isset($_GET['postId'])){
 					$PpostImg = $get['postImg'];
 					$Pactivity = $get['activity'];
 					$Pschool = $get['school'];
+
+					//getting post user profile pic and name
+					$getpic = $connect->query("SELECT profilepic,fullname FROM users WHERE userId='$PuserId'");
+					while($picfetch = $getpic->fetch_assoc()){
+						$Puserpic = $picfetch['profilepic'];
+						$Pusername = $picfetch['fullname'];
+					}
 
 					if($PpostImg != '0'){
 						$img = '<img src="uploads/images/posts/'.$PpostId.'.'.$PpostImg.'" >';
@@ -189,10 +195,10 @@ if(isset($_GET['postId'])){
 					$row = mysqli_num_rows($lcheck);
 					if($row==1)
 					{
-						echo '<div style="border-radius:0px" class="panel panel-default"><div class="panel-heading"><div class="post-uactivity"><span class="post-uname">'.$Pusername.'</span></div><div class="clear"></div></div><div class="panel-body"><p class="post-text">'.$PpostTxt.'</p><span class="post-img">'.$img.'</span></div><div class="panel-footer"><b><span rel-upnum="'.$PpostId.'">'.$Plikes.'</span> . <a href="#" class="downvote"  rel-upvote="'.$PpostId.'">Upvote</a> . <span rel-commnum="'.$PpostId.'">'.$Pcomments.'</span> <span rel-comment="'.$PpostId.'" rel-data="comment" >Comments</span> </b></div></div>';
+						echo '<div style="border-radius:0px" class="panel panel-default"><div class="panel-heading"><div class="post-uimg"><img src="uploads/images/profiles/'.$Puserpic.'"/></div><div class="post-uactivity"><span class="post-uname">'.$Pusername.'</span></div><div class="clear"></div></div><div class="panel-body"><p class="post-text">'.$PpostTxt.'</p><span class="post-img">'.$img.'</span></div><div class="panel-footer"><b><span rel-upnum="'.$PpostId.'">'.$Plikes.'</span> . <a href="#" class="downvote"  rel-upvote="'.$PpostId.'">Upvote</a> . <span rel-commnum="'.$PpostId.'">'.$Pcomments.'</span> <span rel-comment="'.$PpostId.'" rel-data="comment" >Comments</span> </b></div></div>';
 
 					}else{
-						echo '<div style="border-radius:0px"  class="panel panel-default"><div class="panel-heading"><div class="post-uactivity"><span class="post-uname">'.$Pusername.'</span></div><div class="clear"></div></div><div class="panel-body"><p class="post-text">'.$PpostTxt.'</p><span class="post-img">'.$img.'</span></div><div class="panel-footer"><b><span rel-upnum="'.$PpostId.'">'.$Plikes.'</span> . <a href="#" class="upvote"  rel-upvote="'.$PpostId.'">Upvote</a> . <span rel-commnum="'.$PpostId.'">'.$Pcomments.'</span> <span rel-comment="'.$PpostId.'" rel-data="comment" >Comments</span> </b></div></div>';
+						echo '<div style="border-radius:0px"  class="panel panel-default"><div class="panel-heading"><div class="post-uimg"><img src="uploads/images/profiles/'.$Puserpic.'"/></div><div class="post-uactivity"><span class="post-uname">'.$Pusername.'</span></div><div class="clear"></div></div><div class="panel-body"><p class="post-text">'.$PpostTxt.'</p><span class="post-img">'.$img.'</span></div><div class="panel-footer"><b><span rel-upnum="'.$PpostId.'">'.$Plikes.'</span> . <a href="#" class="upvote"  rel-upvote="'.$PpostId.'">Upvote</a> . <span rel-commnum="'.$PpostId.'">'.$Pcomments.'</span> <span rel-comment="'.$PpostId.'" rel-data="comment" >Comments</span> </b></div></div>';
 
 					}
 

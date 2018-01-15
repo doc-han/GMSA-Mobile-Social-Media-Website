@@ -51,7 +51,7 @@ if(isset($_SESSION['userId']))
 
 			// preparing tables for user.
 			$query = "INSERT INTO users (id,userId,firstname,fullname,`email-phone`,gender,school,year,password,lastActivity,profilepic)VALUES(null,'$userId','$firstname','$fullname','$phone','$gender','$school','$year','$password','0','$profilepic');";
-			$query .= "CREATE TABLE `gmsanot`.`$userId` ( `id` INT NOT NULL AUTO_INCREMENT , `sname` VARCHAR(100) NOT NULL , `senderId` VARCHAR(100) NOT NULL , `message` VARCHAR(255) NOT NULL , `type` INT(5) NOT NULL , `link` VARCHAR(255) NOT NULL , `lc` INT(5) NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;";
+			$query .= "CREATE TABLE `gmsanot`.`$userId` ( `id` INT NOT NULL AUTO_INCREMENT , `sname` VARCHAR(100) NOT NULL , `senderId` VARCHAR(100) NOT NULL , `message` VARCHAR(255) NOT NULL , `type` INT(5) NOT NULL , `link` VARCHAR(255) NOT NULL , `lc` INT(5) NOT NULL , `nottime` VARCHAR(20) NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;";
 			$query .= "CREATE TABLE `users_chat`.`$userId` ( `id` INT NOT NULL AUTO_INCREMENT , `msgfrom` VARCHAR(50) NOT NULL , `message` VARCHAR(255) NOT NULL , `msgtime` VARCHAR(20) NOT NULL , `is_read` BOOLEAN NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;";
 			$query .= "CREATE TABLE `gmsafollow`.`$userId` ( `id` INT NOT NULL AUTO_INCREMENT , `userId` VARCHAR(100) NOT NULL , `follow` INT(5) NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;";
 			if(mysqli_multi_query($connect,$query)){

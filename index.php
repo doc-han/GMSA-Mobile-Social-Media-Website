@@ -47,9 +47,7 @@ if(!isset($_SESSION['userId']))
 			<a href="find.php"><div class="sections">
 				Find
 			</div><a/>
-			<a href="constitution.php"><div class="sections">
-				Constitution
-			</div><a/>
+			
 			<a href="chat.php"><div class="sections">
 				Chat <span id="livechat" class="badge"></span>
 			</div><a/>

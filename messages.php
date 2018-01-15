@@ -41,6 +41,7 @@ if(!isset($_SESSION['userId']))
 	$mquery = "SELECT * FROM `$activeUser` WHERE is_read='0'";
 	$getmessages = $chatconnect->query($mquery);
 	$c = null;
+	$count = 0;
 	while($fetch = $getmessages->fetch_assoc()){
 		$mId = $fetch['msgfrom'];
 		//fetching recent message from users
@@ -51,18 +52,23 @@ if(!isset($_SESSION['userId']))
 
 
 		//getting users fullname from ID
-		$uquery = "SELECT fullname FROM users WHERE userId='$mId'";
+		$uquery = "SELECT fullname,profilepic FROM users WHERE userId='$mId'";
 		$getname = $connect->query($uquery);
 		while($name = $getname->fetch_assoc()){
 			$uname = $name['fullname'];
+			$upic = $name['profilepic'];
 		}
 		if($c!=$mId){
-			echo '<a href="conversation.php?oid='.$mId.'"><li class="list-group-item "><img class="online-icon" src="extra/img/online.png" /><img src="extra/img/pic.jpg" class="chat-img"><strong><span class="list-group-item-heading">'.$uname.'</span></strong><BR /><p class="list-group-item-text few-msg">'.$message.'</p></li></a>';
-
+			//<img class="online-icon" src="extra/img/online.png" />
+			echo '<a href="conversation.php?oid='.$mId.'"><li class="list-group-item "><img src="uploads/images/profiles/'.$upic.'" class="chat-img"><strong><span class="list-group-item-heading">'.$uname.'</span></strong><BR /><p class="list-group-item-text few-msg">'.$message.'</p></li></a>';
+			$count++;
 		}
 		$c = $mId;
 	}
 
+	if($count == 0){
+		echo '<li class="list-group-item"><strong><span class="list-group-item-heading"><center>You have no new message</center></span></strong></li>';
+	}
 
 ?>
 				</ol>

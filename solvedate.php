@@ -52,7 +52,7 @@ function solveDate($date){
     $minutes .= $date[$i];
   }
 
-  echo "$hour:$minutes$suffix $day $month, $year";
+  return "$hour:$minutes$suffix $day $month, $year";
 }
 
 

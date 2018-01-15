@@ -88,7 +88,7 @@ if(isset($_SESSION['userId']))
 	<form action="login.php" method="POST" >
 		<input class="form-control" placeholder=" PHONE or EMAIL" value="<?php echo $phone; ?>" name="phone-email" type="text" /><BR />
 		<input class="form-control" placeholder=" PASSWORD" name="pass" type="password" /><BR />
-		<a href="#">Forgot password?</a><BR /><BR />
+		<!--<a href="#">Forgot password?</a><BR /><BR />-->
 		<button class="btn btn-primary" name="go" type="submit">Log me In</button></button></button>
 	<form/>
 		<div class="clear"></div>

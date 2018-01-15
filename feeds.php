@@ -4,6 +4,18 @@ if(!isset($_SESSION['userId']))
 {
 	header('location: login.php');
 }
+		$activeUser = trim($_SESSION['userId']);
+		// h=hours i=minutes d=day m=month Y=year
+		$s = date("s");
+		$i = date("i");
+		$h = date("h");
+		$d = date("d");
+		$y = date("Y");
+		$m = date("m");
+		if(date("a") == "pm"){
+			$h = $h + 12;
+		}
+		$nottime = $y.$m.$d.$h.$i.$s;
 ?>
 
 <!DOCTYPE HTML>
@@ -213,7 +225,7 @@ if(!isset($_SESSION['userId']))
 				$postImg = 0;
 
 
-
+					//uploading post image
 					$location = 'uploads/images/posts/';
 					$target_file = $location . basename($_FILES["file"]["name"]);
 					$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
@@ -222,20 +234,27 @@ if(!isset($_SESSION['userId']))
 					$error = $_FILES["file"]["error"];
 
 					if(!empty($name)) {
-
+							//message for notification to show that an image was Added
+							$message = ["added a new photo","posted an image","uploaded a new image"];
+							$mrand = rand(0,sizeof($message)-1);
+							$message = $message[$mrand];
 						if(move_uploaded_file($tmp_name, $location.$name)){
 							//inserting prototype into the database
 							$postImg = $imageFileType;
 						}else {
 							// I've got nothing to do here!
 						}
+					}else{
+						$message = ["created a new post","wrote a new post","made a new post"];
+						$mrand = rand(0,sizeof($message)-1);
+						$message = $message[$mrand];
 					}
 
 
 
 
 
-				// inserting data into database
+				// inserting post into database
 				$query = "INSERT INTO posts (id,userId,postId,likes,comments,postTxt,postImg,activity,school)VALUES(null,'$userId','$postId','0','0','$postTxt','$postImg','added a new post','$school')";
 				$query1 = "CREATE TABLE `".$postId."` (
 							`id` int(11) NOT NULL AUTO_INCREMENT ,
@@ -245,9 +264,19 @@ if(!isset($_SESSION['userId']))
 							PRIMARY KEY(id)
 						) ENGINE = MyISAM";
 
-
 							$insert = $connect->query($query);
 							$insert1 = $Postconnect->query($query1);
+
+				//code for notification to followers
+				// 1 getting Followers
+				$getf = $followconnect->query("SELECT userId FROM `$activeUser` WHERE follow=1");
+				while($fetchf = $getf->fetch_assoc()){
+					$followersId = $fetchf['userId'];
+
+					//notifing the follower
+					$activeUserName = $_SESSION['fullname'];
+					$notify = $Notconnect->query("INSERT INTO `$followersId` (id,sname,senderId,message,type,link,lc,nottime)VALUES(null, '$activeUserName', '$activeUser', '$message', '1', 'story.php?postId=$postId','1','$nottime') ");
+				}
 
 
 
@@ -275,7 +304,7 @@ if(!isset($_SESSION['userId']))
 		<?php
 				//fetch posts
 				$school = $_SESSION['school'];
-				$pquery = "SELECT * FROM posts WHERE school='$school' ORDER BY id DESC LIMIT 0,20";
+				$pquery = "SELECT * FROM posts WHERE school='$school' ORDER BY id DESC LIMIT 0,50";
 				$get1 = $connect->query($pquery);
 				while($get = $get1->fetch_assoc())
 				{
@@ -288,19 +317,20 @@ if(!isset($_SESSION['userId']))
 					$Pactivity = $get['activity'];
 					$Pschool = $get['school'];
 
-					//getting post user profile pic
+					//getting post user profile pic and name
 					$getpic = $connect->query("SELECT profilepic,fullname FROM users WHERE userId='$PuserId'");
 					while($picfetch = $getpic->fetch_assoc()){
 						$Puserpic = $picfetch['profilepic'];
 						$Pusername = $picfetch['fullname'];
 					}
+
 					if($PpostImg != '0'){
 						$img = '<img src="uploads/images/posts/'.$PpostId.'.'.$PpostImg.'" >';
 					}else{
 						$img = null;
 					}
 
-					$lcheck = $Postconnect->query("SELECT * FROM `$PpostId` WHERE (type='1' || type='3') && userId='$_SESSION[userId]' ");
+					$lcheck = $Postconnect->query("SELECT * FROM `$PpostId` WHERE (type='1' || type='3') && userId='$activeUser' ");
 					$row = mysqli_num_rows($lcheck);
 					if($row==1)
 					{

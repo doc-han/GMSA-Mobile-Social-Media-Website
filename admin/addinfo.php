@@ -19,7 +19,15 @@ if(!isset($_SESSION['adminId']))
 
 <script src="../extra/js/jquery-3.2.1.js"></script>
 <script type="text/javascript">
-
+//This is a function to show user that whether post image is selected or not//
+function imageselected(){
+  var f = $("#file").val();
+  if(f.length > 0){
+    $(".add-photo").text("Image Selected");
+  }else{
+    $(".add-photo").text("Select Image");
+  }
+}
 </script>
 		<title>
 			Admin Login
@@ -54,11 +62,32 @@ if(isset($_POST['go'])){
   $id = htmlentities($_POST['position']);
 	$position = getpos($id);
 
+	//uploading image unto site
+	$location = '../uploads/images/gmsa/';
+	$target_file = $location . basename($_FILES["file"]["name"]);
+	$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+	$name = $_FILES["file"]["name"];
+	$tmp_name = $_FILES["file"]["tmp_name"];
+	$error = $_FILES["file"]["error"];
+	$imagename = "default_profile6.png";
+
+	if(!empty($name)) {
+
+		if(move_uploaded_file($tmp_name, $target_file)){
+			//inserting prototype into the database
+			$imagename = $name;
+			echo "<div class='alert alert-success'>Image uploaded successfully</div>";
+		}else {
+			echo "<div class='alert alert-warning'>Error Uploading Image. Try again at the Edit info Page.</div>";
+		}
+	}
+
+	//inserting info into the database
 	$check = $connect->query("SELECT id FROM executives WHERE id='$id' AND year='$year'");
 	if(mysqli_num_rows($check)>0){
 		echo "<div class='alert alert-danger'>This position is already <b>occupied!</b></div>";
 	}else{
-		$query = "INSERT INTO executives (num,id,fullname,class,year,position,image)VALUES(null,'$id','$fullname','$class','$year','$position',0)";
+		$query = "INSERT INTO executives (num,id,fullname,class,year,position,image)VALUES(null,'$id','$fullname','$class','$year','$position','$imagename')";
 	  $insert = $connect->query($query);
 		echo $connect->error;
 	  if($insert){
@@ -71,10 +100,10 @@ if(isset($_POST['go'])){
 
 
   ?>
-  <form method="POST" action="addinfo.php">
+  <form method="POST" enctype="multipart/form-data" action="addinfo.php">
   <center>
     <label class="custom-file" style="cursor: pointer;">
-      <input style="display: none;" type="file" id="file2" class="custom-file-input">
+      <input style="display: none;" onchange="imageselected()" name="file" type="file" id="file" class="custom-file-input">
       <span class="custom-file-control">
           <div class="add-photo">
           Select Photo
@@ -94,7 +123,7 @@ if(isset($_POST['go'])){
 	<option value="0" >Class</option><option>Science One [ S1 ]</option><option>Science Two [ S2 ]</option><option>Science Three [ S3 ]</option><option>Science Four [ S4 ]</option><option>Science Five [ S5 ]</option><option>Science Six [ S6 ]</option><option>Science Seven [ S7 ]</option><option>General Arts One [ A1 ]</option><option>General Arts Two [ A2 ]</option><option>General Arts Three [ A3 ]</option><option>General Arts Four [ A4 ]</option><option>General Arts Five [ A5 ]</option><option>General Arts Six [ A6 ]</option><option>Visual Arts One [ V1 ]</option><option>Visual Arts Two [ V2 ]</option><option>Business One [ B1 ]</option><option>Business Two [ B2 ]</option>
 </select>
 <select class="form-control" style="margin-top:5px" name="year" value="<?php echo $year; ?>" type="year" >
-	<option value="0" >Year of service</option><option>2008</option><option>2009</option><option>2010</option><option>2011</option><option>2012</option><option>2013</option><option>2014</option><option>2015</option><option>2016</option><option>2017</option>
+	<option value="<?php echo $_SESSION['adminyear'];?>"><?php echo $_SESSION['adminyear'];?></option>
 </select>
 <select class="form-control" style="margin-top:5px" name="position">
 	<option value="0" >Position</option><option value="1" >President [ P ]</option><option value="2" >Vice President [ VP ]</option><option value="3" >General Secetary [ GS ]</option><option value="4" >Imam [ I ]</option><option value="5" >Public Relation Officer [ PRO ]</option>

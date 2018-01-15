@@ -82,8 +82,9 @@ if(!isset($_SESSION['userId']))
       while($fetch = $get->fetch_assoc()){
         $fullname = $fetch['fullname'];
         $position = $fetch['position'];
+				$exepic = $fetch['image'];
 
-        echo '<li class="list-group-item "><img src="uploads/images/profiles/default_profile9.png" class="chat-img"><span class="list-group-item-heading" style="line-height:50px"><strong>'.$fullname.'</strong></span> <span style="line-height:50px;float:right">'.$position.'</span></li>';
+        echo '<li class="list-group-item "><img src="uploads/images/gmsa/'.$exepic.'" class="chat-img"><span class="list-group-item-heading" style="line-height:50px"><strong>'.$fullname.'</strong></span> <span style="line-height:50px;float:right">'.$position.'</span></li>';
       }
     }else{
       $selectedyear = $_SESSION['year'];
@@ -92,8 +93,9 @@ if(!isset($_SESSION['userId']))
       while($fetch = $get->fetch_assoc()){
         $fullname = $fetch['fullname'];
         $position = $fetch['position'];
+				$exepic = $fetch['image'];
 
-        echo '<li class="list-group-item "><img src="uploads/images/profiles/default_profile9.png" class="chat-img"><span class="list-group-item-heading" style="line-height:50px"><strong>'.$fullname.'</strong> </span> <span style="line-height:50px;float:right">'.$position.'</span></li>';
+        echo '<li class="list-group-item "><img src="uploads/images/gmsa/'.$exepic.'" class="chat-img"><span class="list-group-item-heading" style="line-height:50px"><strong>'.$fullname.'</strong> </span> <span style="line-height:50px;float:right">'.$position.'</span></li>';
       }
     }
 		?>

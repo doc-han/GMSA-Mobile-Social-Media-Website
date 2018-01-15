@@ -2,6 +2,17 @@
  include '../dbgmsa.php';
  session_start();
 
+ // h=hours i=minutes d=day m=month Y=year
+ $s = date("s");
+ $i = date("i");
+ $h = date("h");
+ $d = date("d");
+ $y = date("Y");
+ $m = date("m");
+ if(date("a") == "pm"){
+   $h = $h + 12;
+ }
+ $nottime = $y.$m.$d.$h.$i.$s;
 
 	 $postId = $_GET['postId'];
 	 $activeUser = $_SESSION['userId'];
@@ -38,17 +49,12 @@
 			 }
 			 else if($type==2)
 			 {
-        $link = "story.php?postId=".$postId;
-        $check = $Notconnect->query("SELECT lc FROM `$PuserId` WHERE link='$link' AND type='2'");
-        while($check1 = $check->fetch_assoc()){
-          $lc = $check1['lc'];
-        }
-        if($lc == 0){
+
           if($sendNot){
             //sending user a notification
-     		   $add = $Notconnect->query("INSERT INTO `$PuserId` (id,sname,senderId,message,type,link,lc)VALUES(null, '$activeUserName', '$activeUser', '$message', '1', 'story.php?postId=$postId','1') ");
+     		   $add = $Notconnect->query("INSERT INTO `$PuserId` (id,sname,senderId,message,type,link,lc,nottime)VALUES(null, '$activeUserName', '$activeUser', '$message', '1', 'story.php?postId=$postId','1','$nottime') ");
           }
-        }
+
         //updating post type
         $add = $Postconnect->query("UPDATE `$postId` SET type='3' WHERE userId='$activeUser' ");
         //increasing likes by one
@@ -59,6 +65,7 @@
 			 {
 				$add = $Postconnect->query("UPDATE `$postId` SET type='2' WHERE userId='$activeUser' ");
 				$add1 = $connect->query("UPDATE posts SET likes=(likes-1) WHERE postId='$postId' ");
+
 
 			 }
 			 else if($type==0)
@@ -83,7 +90,7 @@
         $add1 = $connect->query("UPDATE posts SET likes=(likes+1) WHERE postId='$postId' ");
         if($sendNot){
         //sending user a notification
-        $add2 = $Notconnect->query("INSERT INTO `$PuserId` (id,sname,senderId,message,type,link,lc)VALUES(null, '$activeUserName', '$activeUser', '$message', '1', 'story.php?postId=$postId','1') ");
+        $add2 = $Notconnect->query("INSERT INTO `$PuserId` (id,sname,senderId,message,type,link,lc,nottime)VALUES(null, '$activeUserName', '$activeUser', '$message', '1', 'story.php?postId=$postId','1','$nottime') ");
       }
 		}
 

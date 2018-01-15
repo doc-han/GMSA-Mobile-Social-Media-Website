@@ -8,6 +8,17 @@
 	 $comment = $_GET['txt'];
 	 $activeUser = $_SESSION['userId'];
    $activeUserName = $_SESSION['fullname'];
+   // h=hours i=minutes d=day m=month Y=year
+   $s = date("s");
+   $i = date("i");
+   $h = date("h");
+   $d = date("d");
+   $y = date("Y");
+   $m = date("m");
+   if(date("a") == "pm"){
+     $h = $h + 12;
+   }
+   $nottime = $y.$m.$d.$h.$i.$s;
 
    //messages that will be displayed as notification to users
    $message = ['left a comment on your post','commented on your post','placed a comment on your post'];
@@ -46,7 +57,7 @@
         $link = "story.php?postId=".$postId;
         if($sendNot){
           //sending user a notification
-   		    $add = $Notconnect->query("INSERT INTO `$PuserId` (id,sname,senderId,message,type,link,lc)VALUES(null, '$activeUserName', '$activeUser', '$message', '2', 'story.php?postId=$postId','1') ");
+   		    $add = $Notconnect->query("INSERT INTO `$PuserId` (id,sname,senderId,message,type,link,lc,nottime)VALUES(null, '$activeUserName', '$activeUser', '$message', '2', 'story.php?postId=$postId','1','$nottime') ");
         }
 
         // this 1 is recieved in the jquery script that sent the AJAX request. It will inform the user that the comment has been added.
@@ -81,7 +92,7 @@
 			 $add1 = $connect->query("UPDATE posts SET comments=(comments+1) WHERE postId='$postId' ");
        if($sendNot){
          //sending user a notification
-  		   $add2 = $Notconnect->query("INSERT INTO `$PuserId` (id,sname,senderId,message,type,link,lc)VALUES(null, '$activeUserName', '$activeUser', '$message', '2', 'story.php?postId=$postId','1') ");
+  		   $add2 = $Notconnect->query("INSERT INTO `$PuserId` (id,sname,senderId,message,type,link,lc,nottime)VALUES(null, '$activeUserName', '$activeUser', '$message', '2', 'story.php?postId=$postId','1','$nottime') ");
        }
        // same as the one above.
        echo 1;

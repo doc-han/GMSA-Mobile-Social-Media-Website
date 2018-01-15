@@ -138,15 +138,15 @@ var action;
   <tbody>
     <tr>
       <td><b>followers</b></td>
-      <td><?php echo $followers;?></td>
+      <td><?php echo $followers;?> <a class="pull-right" href="view.php?cat=followers&ref=<?php echo $profileId;?>">show all</a> </td>
     </tr>
     <tr>
       <td><b>following</b></td>
-      <td><?php echo $following;?></td>
+      <td><?php echo $following;?> <a class="pull-right" href="view.php?cat=following&ref=<?php echo $profileId;?>">show all</a></td>
     </tr>
     <tr>
       <td><b>posts</b></td>
-      <td><?php echo $pposts; ?></td>
+      <td><?php echo $pposts; ?> <a class="pull-right" href="view.php?cat=posts&ref=<?php echo $profileId;?>">show all</a></td>
     </tr>
     <tr>
       <td><b>Email/Phone</b></td>

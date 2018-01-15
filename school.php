@@ -33,7 +33,7 @@ if(!isset($_SESSION['userId']))
 		?>
 		<div class="panel panel-primary">
 			<div class="panel-heading"><BR />
-			<center><strong>KNUST Senior High - 2017</strong></center>
+			<center><strong>KNUST Senior High - <?php echo date('Y');?></strong></center>
 			</div>
 			<div class="panel-body">
 				<a href="executives.php"><button style="float:left;width:49%;padding-top:10px;padding-bottom:10px" class="btn btn-danger">Executives</button></a>
