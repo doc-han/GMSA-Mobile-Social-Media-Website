@@ -193,7 +193,7 @@ if(isset($_POST['edit'])){
     </tr>
     <tr>
       <td><b>year</b></td>
-      <td><?php echo $year; ?></td>
+      <td><? $o = $year+3; echo "$year - $o"; ?></td>
     </tr>
     <tr>
       <td><b>school</b></td>

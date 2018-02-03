@@ -22,17 +22,14 @@ if(!isset($_SESSION['adminId']))
 
 <script src="../extra/js/jquery-3.2.1.js"></script>
 <script type="text/javascript">
-$(document).ready(function(){
-  $("input[name='position']").hide();
-  $("#exe").click(function(){
-    $("input[name='position']").show();
-    $("input[name='position']").attr("value","");
-  });
-  $("#mem").click(function(){
-    $("input[name='position']").hide();
-    $("input[name='position']").attr("value","none");
-  });
-});
+	function imageselected(){
+	  var f = $("#file").val();
+	  if(f.length > 0){
+	    $(".add-photo").text("Image Selected");
+	  }else{
+	    $(".add-photo").text("Select Image");
+	  }
+	}
 </script>
 		<title>
 			Admin Login
@@ -71,29 +68,75 @@ include "../dbgmsa.php";
     }
 
     include 'positionslist.php';
+			$id = getposint($position);
 
 		if(isset($_POST['edit'])){
+
 			$efullname = trim($_POST['fullname']);
 			$eclass = $_POST['class'];
-			$eid = $_POST['position'] + 1;
+			$eid = $_POST['position'];
 			$epos = getpos($eid);
-			if($eclass == '0' && $epos == '0'){
-				$query = "UPDATE executives SET fullname='$efullname' WHERE id='$execid'";
-			}else if($epos == '0' && $eclass != '0'){
-				$equery = "UPDATE executives SET fullname='$efullname', class='$eclass' WHERE id='$execid'";
-			}else if($eclass == '0' && $epos != '0'){
-				$equery = "UPDATE executives SET fullname='$efullname', position='$epos', id='$eid' WHERE id='$execid'";
-			}else if($eclass != '0' && $epos != '0'){
-				$equery = "UPDATE executives SET fullname='$efullname', class='$eclass', position='$epos', id='$eid' WHERE id='$execid'";
+
+			//updating info pic
+			$location = '../uploads/images/gmsa/';
+			$target_file = $location . basename($_FILES["file"]["name"]);
+			$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+			$name = "$year-$id.$imageFileType";
+			$tmp_name = $_FILES["file"]["tmp_name"];
+			$error = $_FILES["file"]["error"];
+
+			if(!empty($_FILES["file"]["name"])) {
+
+//removing the existing image
+				if(file_exists("uploads/images/gmsa/$name")){
+					if($profilepic != "default_profile6.png"){
+						unlink("uploads/images/gmsa/$name");
+					}
+				}
+//uploading the new image
+				if(move_uploaded_file($tmp_name, $location.$name)){
+					//inserting prototype into the database
+					$imagename = $name;
+					$imageNot = "Image might change within an hour!";
+
+					if($eclass == '0' && $eid == '0'){
+						$equery = "UPDATE executives SET fullname='$efullname', image='$imagename' WHERE id='$execid'";
+					}else if($eid == '0' && $eclass != '0'){
+						$equery = "UPDATE executives SET fullname='$efullname', class='$eclass', image='$imagename' WHERE id='$execid'";
+					}else if($eclass == '0' && $eid != '0'){
+						$equery = "UPDATE executives SET fullname='$efullname', position='$epos', id='$eid', image='$imagename' WHERE id='$execid'";
+					}else if($eclass != '0' && $eid != '0'){
+						$equery = "UPDATE executives SET fullname='$efullname', class='$eclass', position='$epos', id='$eid', image='$imagename' WHERE id='$execid'";
+					}else{
+						//nothing to do here
+					}
+
+				}else {
+					echo "<div class='alert alert-warning'>Error Uploading Image. Try again at the Edit info Page.</div>";
+				}
 			}else{
-				//nothing to do here
+				//do something if image is empty
+				if($eclass == '0' && $eid == '0'){
+					$equery = "UPDATE executives SET fullname='$efullname' WHERE id='$execid'";
+				}else if($eid == '0' && $eclass != '0'){
+					$equery = "UPDATE executives SET fullname='$efullname', class='$eclass' WHERE id='$execid'";
+				}else if($eclass == '0' && $eid != '0'){
+					$equery = "UPDATE executives SET fullname='$efullname', position='$epos', id='$eid' WHERE id='$execid'";
+				}else if($eclass != '0' && $eid != '0'){
+					$equery = "UPDATE executives SET fullname='$efullname', class='$eclass', position='$epos', id='$eid' WHERE id='$execid'";
+				}else{
+					//nothing to do here
+				}
+
 			}
+
 
 			$update = $connect->query($equery);
 			if($update){
-				$_SESSION['message'] = "<div class='alert alert-success'>Changes made successfully!</div>";
+				$_SESSION['message'] = "<div class='alert alert-success'>Changes made successfully! $imageNot</div>";
 				header('location: infolist.php');
 			}else{
+				$error = $connect->error;
 				$_SESSION['message'] = "<div class='alert alert-danger'>Error making changes. try again!</div>";
 				header('location: infolist.php');
 			}

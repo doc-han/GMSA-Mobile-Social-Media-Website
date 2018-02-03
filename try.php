@@ -39,7 +39,7 @@ function getposint($var){
     /*14*/"Treasure [ T ]",
     /*15*/"Deputy Womens Commissioner [ DWC ]"
   ];
-  for($i=0;$i<sizeof($positionslist);$i++){
+  for($i=0;$i<=sizeof($positionslist);$i++){
     if($positionslist[$i] == $var){
       return $i+1;
     }

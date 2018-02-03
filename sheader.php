@@ -15,6 +15,12 @@ $(document).ready(function() {
 	<a href="feeds.php"><li>Feeds </li></a>
 	<a href="chat.php"><li>Chat <span id="livechat" class="badge"></span></li></a>
 	<a href="messages.php"><li>Messages <span id="livemessages" class="badge"></span></li></a>
-	<a href="notification.php">notifications <span id="livenot" class="badge"></span></a>
+	<a href="notification.php">Notifications <span id="livenot" class="badge"></span></a>
+	<?php
+	$exe = $_SESSION['exe'];
+	if($exe == '1'){
+		echo '<a href="headchat.php">Executives <span id="livenot" class="badge"></span></a>';
+	}
+	?>
 	<a href="find.php"><li>Find</li></a>
 </ul>

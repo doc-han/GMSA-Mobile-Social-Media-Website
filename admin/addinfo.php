@@ -4,6 +4,10 @@ if(!isset($_SESSION['adminId']))
 {
 	header('location: ../admin');
 }
+$adminType = trim($_SESSION['admintype']);
+if($adminType == 3){
+	header('location: cpanel.php');
+}
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -66,14 +70,14 @@ if(isset($_POST['go'])){
 	$location = '../uploads/images/gmsa/';
 	$target_file = $location . basename($_FILES["file"]["name"]);
 	$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
-	$name = $_FILES["file"]["name"];
+	$name = "$year-$id.$imageFileType";
 	$tmp_name = $_FILES["file"]["tmp_name"];
 	$error = $_FILES["file"]["error"];
 	$imagename = "default_profile6.png";
 
-	if(!empty($name)) {
+	if(!empty($_FILES["file"]["name"])) {
 
-		if(move_uploaded_file($tmp_name, $target_file)){
+		if(move_uploaded_file($tmp_name, $location.$name)){
 			//inserting prototype into the database
 			$imagename = $name;
 			echo "<div class='alert alert-success'>Image uploaded successfully</div>";

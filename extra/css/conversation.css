@@ -36,7 +36,8 @@
     word-wrap: break-word;
     position: fixed;
     bottom: 100px;
-    top: 195px;
+    min-width: 100%;
+    max-width: 100%;
     overflow-y: scroll;
     padding: 20px 10px;
     background-color: #ececec;

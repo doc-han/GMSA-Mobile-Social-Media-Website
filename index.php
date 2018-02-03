@@ -47,10 +47,19 @@ if(!isset($_SESSION['userId']))
 			<a href="find.php"><div class="sections">
 				Find
 			</div><a/>
-			
+
 			<a href="chat.php"><div class="sections">
 				Chat <span id="livechat" class="badge"></span>
 			</div><a/>
+			<a href="gallery.php"><div class="sections">
+				Gallery
+			</div><a/>
+			<?php
+			$exe = $_SESSION['exe'];
+			if($exe == '1'){
+				echo '<a href="headchat.php"><div class="sections">Executives</div><a/>';
+			}
+			?>
 			<a href="logout.php"><div class="sections">
 				Log Out
 			</div><a/>

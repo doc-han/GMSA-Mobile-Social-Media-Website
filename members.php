@@ -48,16 +48,18 @@ if(!isset($_SESSION['userId']))
 			$interval = $currentyear - $b;
 			for($i=$currentyear;$i>=$b;$i--){
         if(!isset($selectedyear)){
+					$o = $i+3;
           if($i == $_SESSION['year']){
-  					echo "$stag $i $tag2";
+  					echo "$stag $i - $o $tag2";
   				}else{
-  					echo "$tag1 $i $tag2";
+  					echo "$tag1 $i - $o $tag2";
   				}
         }else{
+					$o = $i+3;
           if($i == $selectedyear){
-  					echo "$stag $i $tag2";
+  					echo "$stag $i - $o $tag2";
   				}else{
-  					echo "$tag1 $i $tag2";
+  					echo "$tag1 $i - $o $tag2";
   				}
         }
 

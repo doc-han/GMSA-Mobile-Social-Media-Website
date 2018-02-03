@@ -50,7 +50,7 @@ if(isset($_SESSION['userId']))
 			$profilepic = "default_profile".$prand.".png";
 
 			// preparing tables for user.
-			$query = "INSERT INTO users (id,userId,firstname,fullname,`email-phone`,gender,school,year,password,lastActivity,profilepic)VALUES(null,'$userId','$firstname','$fullname','$phone','$gender','$school','$year','$password','0','$profilepic');";
+			$query = "INSERT INTO users (id,userId,firstname,fullname,`email-phone`,gender,school,year,password,lastActivity,profilepic,exe)VALUES(null,'$userId','$firstname','$fullname','$phone','$gender','$school','$year','$password','0','$profilepic','0');";
 			$query .= "CREATE TABLE `gmsanot`.`$userId` ( `id` INT NOT NULL AUTO_INCREMENT , `sname` VARCHAR(100) NOT NULL , `senderId` VARCHAR(100) NOT NULL , `message` VARCHAR(255) NOT NULL , `type` INT(5) NOT NULL , `link` VARCHAR(255) NOT NULL , `lc` INT(5) NOT NULL , `nottime` VARCHAR(20) NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;";
 			$query .= "CREATE TABLE `users_chat`.`$userId` ( `id` INT NOT NULL AUTO_INCREMENT , `msgfrom` VARCHAR(50) NOT NULL , `message` VARCHAR(255) NOT NULL , `msgtime` VARCHAR(20) NOT NULL , `is_read` BOOLEAN NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;";
 			$query .= "CREATE TABLE `gmsafollow`.`$userId` ( `id` INT NOT NULL AUTO_INCREMENT , `userId` VARCHAR(100) NOT NULL , `follow` INT(5) NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;";
@@ -81,7 +81,35 @@ if(isset($_SESSION['userId']))
 		</select>
 		<BR />
 		<select class="form-control" name="year" value="<?php echo $year; ?>" type="year" >
-			<option>YEAR YOU STARTED THE SCHOOL</option><option>2008</option><option>2009</option><option>2010</option><option>2011</option><option>2012</option><option>2013</option><option>2014</option><option>2015</option><option>2016</option><option>2017</option>
+			<option>YEAR YOU STARTED THE SCHOOL</option>
+			<?php
+
+			      $selectedyear = date('Y');
+
+						$tag1 = '<option>';
+						$stag = '<option selected>';
+						$tag2 = '</option>';
+						$b = 2008;
+						$currentyear = date('Y');
+						$interval = $currentyear - $b;
+						for($i=$currentyear;$i>=$b;$i--){
+			        if(!isset($selectedyear)){
+			          if($i == $_SESSION['year']){
+			  					echo "$stag $i $tag2";
+			  				}else{
+			  					echo "$tag1 $i $tag2";
+			  				}
+			        }else{
+			          if($i == $selectedyear){
+			  					echo "$stag $i $tag2";
+			  				}else{
+			  					echo "$tag1 $i $tag2";
+			  				}
+			        }
+
+
+						}
+			?>
 		</select>
 		<BR />
 		<input class="form-control" name="pass" value="<?php echo $password; ?>" placeholder=" PASSWORD" type="password" />

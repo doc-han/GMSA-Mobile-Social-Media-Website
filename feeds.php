@@ -233,7 +233,7 @@ if(!isset($_SESSION['userId']))
 					$tmp_name = $_FILES["file"]["tmp_name"];
 					$error = $_FILES["file"]["error"];
 
-					if(!empty($name)) {
+					if(!empty($_FILES["file"]["name"])) {
 							//message for notification to show that an image was Added
 							$message = ["added a new photo","posted an image","uploaded a new image"];
 							$mrand = rand(0,sizeof($message)-1);
@@ -255,7 +255,8 @@ if(!isset($_SESSION['userId']))
 
 
 				// inserting post into database
-				$query = "INSERT INTO posts (id,userId,postId,likes,comments,postTxt,postImg,activity,school)VALUES(null,'$userId','$postId','0','0','$postTxt','$postImg','added a new post','$school')";
+				// no activity has been set for adding a new post
+				$query = "INSERT INTO posts (id,userId,postId,likes,comments,postTxt,postImg,activity,school)VALUES(null,'$userId','$postId','0','0','$postTxt','$postImg',' ','$school')";
 				$query1 = "CREATE TABLE `".$postId."` (
 							`id` int(11) NOT NULL AUTO_INCREMENT ,
 							`userId` varchar(255) NOT NULL,

@@ -45,37 +45,49 @@ if(isset($_SESSION['userId']))
 	{
 		// getting data from user input
 		$phone = stripcslashes(htmlentities(trim($_POST['phone-email'])));
-		$pass = stripcslashes(htmlentities(trim(md5($_POST['pass']))));
+		$pass = trim($_POST['pass']);
 
-		// checking if data is valid
-		$query = "SELECT * FROM users WHERE `email-phone`='$phone' AND password='$pass'";
+		if(($phone != "" || $phone != null)&&($pass != "" || $pass != null)){
+			// all fields have been set
 
-		$check = $connect->query($query);
-		$rows = mysqli_num_rows($check);
-		if($rows == 1)
-		{
-			while($fetch = $check->fetch_assoc())
+			$pass = stripcslashes(htmlentities(md5($pass)));
+			// checking if data is valid
+			$query = "SELECT * FROM users WHERE `email-phone`='$phone' AND password='$pass'";
+
+			$check = $connect->query($query);
+			$rows = mysqli_num_rows($check);
+			if($rows == 1)
 			{
-				$_SESSION['profilepic'] = $fetch['profilepic'];
-				$_SESSION['firstname'] = $fetch['firstname'];
-				$_SESSION['fullname'] = $fetch['fullname'];
-				$_SESSION['userId'] = $fetch['userId'];
-				$_SESSION['phone'] = $fetch['email-phone'];
-				$_SESSION['school'] = $fetch['school'];
-				$_SESSION['year'] = $fetch['year'];
-				$_SESSION['gender'] = $fetch['gender'];
+				while($fetch = $check->fetch_assoc())
+				{
+					$_SESSION['profilepic'] = $fetch['profilepic'];
+					$_SESSION['firstname'] = $fetch['firstname'];
+					$_SESSION['fullname'] = $fetch['fullname'];
+					$_SESSION['userId'] = $fetch['userId'];
+					$_SESSION['phone'] = $fetch['email-phone'];
+					$_SESSION['school'] = $fetch['school'];
+					$_SESSION['year'] = $fetch['year'];
+					$_SESSION['gender'] = $fetch['gender'];
+					$_SESSION['exe'] = $fetch['exe'];
 
-				if($_SESSION['new-user']){
-					header('location: account.php');
-				}else{
-					header('location: index.php');
+					if($_SESSION['new-user']){
+						header('location: account.php');
+					}else{
+						header('location: index.php');
+					}
+
 				}
 
+			}else{
+				echo "<div class='alert alert-danger'>Phone/Email or Password Invalid!</div>";
 			}
-
 		}else{
-			echo "<div class='alert alert-danger'>Phone/Email or Password Invalid!</div>";
+			//some field was left blank
+
+			echo "<div class='alert alert-danger'>Can't login with blank details</div>";
 		}
+
+
 
 
 	}

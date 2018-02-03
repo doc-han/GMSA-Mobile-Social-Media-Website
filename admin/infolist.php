@@ -20,7 +20,6 @@ if(!isset($_SESSION['adminId']))
 
 	<!--linking the javascript files-->
 	<script src="../extra/js/jquery-3.2.1.js"></script>
-	<script src="../extra/js/lastActivity.js"></script>
 
 <script src="../extra/js/jquery-3.2.1.js"></script>
 		<title>

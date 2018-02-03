@@ -27,7 +27,7 @@ if(isset($_SESSION['adminId']))
 
 	<div class="form-container">
 	<div class="marginh-10p marginv-5p">
-	<center><h3>Administrators Only</h3></center><BR />
+	<center><h3 style="font-family:monospace;">Administrators Only</h3></center><BR />
 	<?php
 	include '../dbgmsa.php';
 
@@ -74,6 +74,9 @@ if(isset($_SESSION['adminId']))
 		<!--<a href="#">Forgot password?</a><BR /><BR />-->
 		<button class="btn btn-primary" name="go" type="submit">Log me In</button></button></button>
 	<form/>
+
+	<HR>
+	<center><h4><a style="text-decoration: none" href="create.php">| Create new |</a></h4></center>
 		<div class="clear"></div>
 	</div>
 

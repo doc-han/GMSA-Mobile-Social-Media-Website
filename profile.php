@@ -158,7 +158,7 @@ var action;
     </tr>
     <tr>
       <td><b>year</b></td>
-      <td><?php echo $pyear; ?></td>
+      <td><?php $o = $pyear+3;echo "$pyear - $o"; ?></td>
     </tr>
     <tr>
       <td><b>school</b></td>

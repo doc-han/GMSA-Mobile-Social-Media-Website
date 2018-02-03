@@ -4,6 +4,8 @@ if(!isset($_SESSION['adminId']))
 {
 	header('location: ../admin');
 }
+
+$adminType = trim($_SESSION['admintype']);
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -25,10 +27,9 @@ if(!isset($_SESSION['adminId']))
 
 	<?php include 'header.php';?>
 
-	<div class="list-group">
 		<?php
 		include '../dbgmsa.php';
-		$yearfilter = $_SESSION['adminyear'];
+		$yearfilter = $_SESSION['adminyear'] - 2;//this is because admin year is greater than users year for a group
 		//getting total number of users
 		$getTotal = $connect->query("SELECT id FROM users WHERE year='$yearfilter'");
 		$total = mysqli_num_rows($getTotal);
@@ -40,16 +41,48 @@ if(!isset($_SESSION['adminId']))
 		$females = mysqli_num_rows($getFemales);
 
 		?>
-		<a href="#" class="list-group-item active">Total number of users <span class="badge"><?php echo $total; ?></span></a>
-		<a href="#" class="list-group-item ">Total number of males <span class="badge"><?php echo $males; ?></span></a>
-		<a href="#" class="list-group-item active">Total number of females <span class="badge"><?php echo $females; ?></span></a>
-		<!--<a href="#" class="list-group-item a">Reports <span class="badge">5</span></a>-->
-	</div>
+		<table class="table table-striped">
+		  <tbody>
+		    <tr>
+		      <td><b>Total number of users</b></td>
+		      <td><?php echo $total; ?></td>
+		    </tr>
+				<tr>
+		      <td><b>Total number of males</b></td>
+		      <td><?php echo $males; ?></td>
+		    </tr>
+				<tr>
+		      <td><b>Total number of females</b></td>
+		      <td><?php echo $females; ?></td>
+		    </tr>
+			</tbody>
+		</table>
 
 	<div class="container" style="width: 100%">
-		<a href="addinfo.php"><button type="button" style="width: 49%" class="btn btn-warning" name="button">Add info</button></a>
+		<?php
+if($adminType == 1){
+	echo '<a href="addinfo.php"><button type="button" style="width: 49%" class="btn btn-warning" name="button">Add info</button></a>';
+	echo '<a href="infolist.php"><button type="button" style="width: 49%" class="btn btn-danger  pull-right" name="button">Edit info</button></a>';
+	echo '<a href="select.php"><button type="button" style="margin-top:10px" class="form-control btn btn-primary" name="button">Select Executives</button></a>';
+}else if($adminType == 2){
+	echo '<a href="addinfo.php"><button type="button" style="width: 49%" class="btn btn-warning" name="button">Add info</button></a>';
+	echo '<a href="infolist.php"><button type="button" style="width: 49%" class="btn btn-danger  pull-right" name="button">Edit info</button></a>';
+	echo '<a href="addmem.php"><button type="button" style="margin-top:10px" class="form-control btn btn-info" name="button">Add memories</button></a>';
+}else if($adminType == 3){
+	echo '<a href="addmem.php"><button type="button" style="width: 49%" class="btn btn-info" name="button">Add memories</button></a>';
+	echo '<a href="infolist.php"><button type="button" style="width: 49%" class="btn btn-danger  pull-right" name="button">Edit info</button></a>';
+	echo '<a href="upload.php"><button type="button" style="margin-top:10px" class=" form-control btn btn-primary" name="button">Upload minutes</button></a>';
+}else{
+	// I've got nothing to do here.
+	echo "Not a real admin";
+}
+		?>
+		<!--<a href="addinfo.php"><button type="button" style="width: 49%" class="btn btn-warning" name="button">Add info</button></a>
 		<button type="button" style="width: 49%" class="btn btn-danger disabled" name="button">Edit info</button>
-		<!--<a href="finduser.php"><button type="button" style="width: 49%;margin-top:5px" class="btn btn-dark" name="button">Find User</button></a>-->
+
+		<a href="#"><button type="button" style="width: 49%;margin-top:10px" class="btn btn-info" name="button">Add memories</button></a>
+		<a href="#"><button type="button" style="width: 49%;margin-top:10px" class="btn btn-dark" name="button">Select Executives</button></a>
+		<a href="#"><button type="button" style="margin-top:10px" class=" form-control btn btn-primary" name="button">Uploads minutes</button></a>-->
 	</div>
 	<br>
 	<div class="container">

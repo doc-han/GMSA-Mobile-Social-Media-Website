@@ -1,6 +1,7 @@
 
 $(document).ready(function(){
-
+  var top = $('.ud').height()+$('#simple-nav').height()+24;
+  $('.mb').css("top", top);
   // scrolls chat to the bottom.
   function scrollToBottom(){
     $('.mb').animate({scrollTop:100000}, 'slow');

@@ -50,7 +50,7 @@ if(!isset($_SESSION['userId']))
 				if($name != null)
 				{
 					// search and fetch from database
-						$query = "SELECT fullname,userId FROM users WHERE fullname LIKE '%$name%'";
+						$query = "SELECT fullname,userId,profilepic FROM users WHERE fullname LIKE '%$name%'";
 						$check = $connect->query($query);
 						$rows = mysqli_num_rows($check);
 						if($rows > 1){
@@ -66,8 +66,9 @@ if(!isset($_SESSION['userId']))
 							while($fetch = $check->fetch_assoc()){
 								$fullname = $fetch['fullname'];
 								$id = $fetch['userId'];
+								$pic = $fetch['profilepic'];
 
-								echo "<a href='profile.php?ref=$id'><li class='list-group-item '><img src='extra/img/pic.jpg' class='chat-img'><strong><span class='list-group-item-heading' style='line-height:50px'>$fullname</span></strong></li>";
+								echo "<a href='profile.php?ref=$id'><li class='list-group-item '><img src='uploads/images/profiles/$pic' class='chat-img'><strong><span class='list-group-item-heading' style='line-height:50px'>$fullname</span></strong></li>";
 							}
 						}
 				}
